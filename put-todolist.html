@@ -15,16 +15,16 @@
 
       <h2>新しいタスクの追加</h2>
       <form class="add-form">
-        新しいタスク<input type="text" ref="comment" /> 期限<input
+        新しいタスク<input type="text" v-model="newcomment" /> 期限<input
           type="date"
-          ref="day"
+          v-model="newday"
         />
-        <button type="button" v-on:click.prevent="doAdd">追加</button>
+        <button type="button" v-on:click="doAdd()">追加</button>
+        <button type="button" v-on:click="doclear()">クリア</button>
       </form>
 
       <h2>タスクリスト</h2>
       <p>※削除ボタンは、[Ctrl]キーを押しながらクリックして下さい。</p>
-      <p>※編集のキャンセルは、[Shift]キーを押しながら、クリックしてください</p>
       <table>
         <thead>
           <tr>
@@ -36,17 +36,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in todos" v-bind:class="{done:item.state}">
+          <tr
+            v-for="item in todos"
+            v-bind:key="item.comment"
+            v-bind:class="{done:item.state}"
+          >
             <td>
-              <label v-show="!item.editform">{{ item.comment }}</label>
-              <label v-show="item.editform"
-                ><input type="text" v-model="item.comment"
+              <label>{{ item.comment }}</label><br />
+              <label v-show="item.editform">
+                <input type="text" v-model="editcomment"
               /></label>
             </td>
             <td class="day">
-              <label v-show="!item.editform">{{ item.day }}</label>
+              <label>{{ item.day }}</label>
               <label v-show="item.editform"
-                ><input type="date" v-model="item.day"
+                ><input type="date" v-model="editday"
               /></label>
             </td>
             <td class="state">
@@ -68,16 +72,14 @@
             <td class="edit">
               <button
                 type="button"
-                v-on:click="doCommentform(item)"
-                v-show="!item.editform"
+                v-on:click="doform(item)"
+                v-show="!item.editform && editonly"
               >
                 編集
               </button>
               <div v-show="item.editform">
-                <button type="button" v-on:click="doChangeComment(item)">
-                  保存
-                </button>
-                <button type="button" v-on:click.shift="doeditstop(item)">
+                <button type="button" v-on:click="doChange(item)">保存</button>
+                <button type="button" v-on:click="doeditstop(item)">
                   キャンセル
                 </button>
               </div>
@@ -90,6 +92,7 @@
           </tr>
         </tbody>
       </table>
+      <pre>{{ $data }}</pre>
     </div>
 
     <script src="put-todolist.js"></script>
