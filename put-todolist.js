@@ -6,7 +6,7 @@ new Vue({
     todos: [],
     editcomment: "",
     editday: "",
-    editonly: true,
+    editform: false,
   },
 
   watch: {
@@ -28,13 +28,6 @@ new Vue({
       handler: function (todos) {
         const parsed = JSON.stringify(todos);
         localStorage.setItem("todos", parsed);
-      },
-      deep: true,
-    },
-    editonly: {
-      handler: function (editonly) {
-        const parsed = JSON.stringify(editonly);
-        localStorage.setItem("editonly", parsed);
       },
       deep: true,
     },
@@ -75,13 +68,6 @@ new Vue({
         localStorage.removeItem("todos");
       }
     }
-    if (localStorage.getItem("editonly")) {
-      try {
-        this.editonly = JSON.parse(localStorage.getItem("editonly"));
-      } catch (e) {
-        localStorage.removeItem("editonly");
-      }
-    }
     if (localStorage.getItem("editcomment")) {
       try {
         this.editcomment = JSON.parse(localStorage.getItem("editcomment"));
@@ -100,7 +86,7 @@ new Vue({
 
   methods: {
     doAdd: function () {
-      if (this.newcomment == "") {
+      if (this.newcomment === "") {
         return;
       }
       this.todos.push({
@@ -123,28 +109,25 @@ new Vue({
 
     doform: function (item) {
       item.editform = true;
-      this.editonly = false;
       this.editcomment = item.comment;
       this.editday = item.day;
     },
 
     doChange: function (item) {
-      if (this.editcomment == "") {
+      if (this.editcomment === "") {
         return;
       }
       item.comment = this.editcomment;
       item.day = this.editday;
       item.editform = false;
-      this.editonly = true;
     },
 
     doeditstop: function (item) {
       item.editform = false;
-      this.editonly = true;
     },
 
     doRemove: function (item) {
-      let index = this.todos.indexOf(item);
+      const index = this.todos.indexOf(item);
       this.todos.splice(index, 1);
     },
   },

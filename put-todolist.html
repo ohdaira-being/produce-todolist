@@ -73,7 +73,7 @@
               <button
                 type="button"
                 v-on:click="doform(item)"
-                v-show="!item.editform && editonly"
+                v-show="!item.editform"
               >
                 編集
               </button>
@@ -92,9 +92,7 @@
           </tr>
         </tbody>
       </table>
-      <pre>{{ $data }}</pre>
     </div>
-
     <script src="put-todolist.js"></script>
   </body>
 </html>
